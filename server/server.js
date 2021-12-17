@@ -65,6 +65,7 @@ app.post('/login', (req,res) => {
                 // console.log(user+' '+pass);
             }
             else{
+                console.log(result[0])
                 if(pass === result[0].password){
                     res.send('company');
                 }
@@ -94,11 +95,7 @@ app.post('/create/company', (req,res) => {
     const password = req.body.password
     const description = req.body.description
     const reg_num = req.body.registration_num
-    let d = '';
-    name.map((e, key) => {
-        if(e === ' ') d = d + '_';
-        else d = d + e;
-    })
+    let d = name;
     db.query('INSERT INTO comapny (name, password, description) VALUES(?,?,?)',[name, password, description], (err, result) => {
         if(err){
             console.log(err);
@@ -174,7 +171,15 @@ app.post('/company/student', (req, res) => {
             console.log(err);
         }
         else{
-            res.send("Status updated");//registration_num
+            // res.send("Status updated");//registration_num
+        }
+    })
+    db.query("UPDATE "+reg_num+" SET status = '"+status+"' WHERE name = '"+name+"'", (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.send("Status updated");
         }
     })
 });
